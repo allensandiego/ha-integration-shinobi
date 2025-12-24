@@ -29,7 +29,8 @@ async def async_setup_entry(
 
     entities = []
     for mid, monitor in monitors_dict.items():
-        entities.append(ShinobiStatusSensor(coordinator, monitor))
+        if monitor.get("status") != "Stopped":
+            entities.append(ShinobiStatusSensor(coordinator, monitor))
 
     async_add_entities(entities)
 

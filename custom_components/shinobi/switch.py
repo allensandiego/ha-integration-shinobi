@@ -34,7 +34,8 @@ async def async_setup_entry(
 
     entities = []
     for mid, monitor in monitors_dict.items():
-        entities.append(ShinobiRecordingSwitch(coordinator, api, monitor))
+        if monitor.get("status") != "Stopped":
+            entities.append(ShinobiRecordingSwitch(coordinator, api, monitor))
 
     async_add_entities(entities)
 
