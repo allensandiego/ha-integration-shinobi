@@ -6,7 +6,8 @@
                 "data": {
                     "url": "Server URL",
                     "api_key": "API Key",
-                    "group_key": "Group Key"
+                    "group_key": "Group Key",
+                    "verify_ssl": "Verify SSL Certificate"
                 }
             }
         },

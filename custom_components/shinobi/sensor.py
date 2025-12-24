@@ -54,6 +54,7 @@ class ShinobiStatusSensor(CoordinatorEntity, SensorEntity):
             extra_attributes = {
                 "mid": monitor.get("mid"),
                 "type": monitor.get("type"),
+                "mode": monitor.get("mode"),
             }
             
             streams = monitor.get("streams", [])

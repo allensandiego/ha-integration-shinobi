@@ -8,6 +8,7 @@ Shinobi Video provides a custom integration for [Shinobi.Video](https://shinobi.
 ## Features
 - 🎥 **Live Camera Streams**: Supports both HLS and MJPEG streaming (automatically detected based on your Shinobi monitor settings).
 - 📸 **Instant Snapshots**: View high-quality still images directly in your Home Assistant dashboard.
+- 🔴 **Control Recordings**: Toggle recording on/off for each camera with dedicated switch entities.
 - 🔔 **Monitor Status**: Real-time sensors showing the current status of each monitor.
 - 🔗 **Rich Metadata**: Access direct stream URLs and Monitor IDs through entity attributes.
 - 🛠️ **Seamless Connection**: Built-in support for SSL verification toggles and automatic URL protocol resolution.
@@ -47,6 +48,3 @@ You will be prompted for:
 - **Verify SSL**: Uncheck this if you are using self-signed certificates on your local Shinobi server.
 
 The integration will automatically detect all monitors and create corresponding Camera and Sensor entities.
-
-## Contributions
-Contributions are welcome! Pull requests and issues are the best way to improve this integration.

@@ -78,6 +78,14 @@ class ShinobiCamera(CoordinatorEntity, Camera):
         return {}
 
     @property
+    def is_recording(self) -> bool:
+        """Return true if the device is recording."""
+        monitor = self.coordinator.data.get(self._monitor_id)
+        if monitor:
+            return monitor.get("mode") == "record"
+        return False
+
+    @property
     def is_on(self) -> bool:
         """Return true if the camera is active."""
         return True

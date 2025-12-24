@@ -15,7 +15,7 @@ from .const import DOMAIN, CONF_GROUP_KEY, CONF_URL, CONF_API_KEY, CONF_VERIFY_S
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS: list[str] = ["sensor", "camera"]
+PLATFORMS: list[str] = ["sensor", "camera", "switch"]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
