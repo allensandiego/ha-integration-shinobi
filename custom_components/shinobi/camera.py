@@ -67,7 +67,7 @@ class ShinobiCamera(CoordinatorEntity, Camera):
             self._stream_type,
         )
         
-        if self._stream_type == "hls":
+        if self._stream_type in ("hls", "rtsp", "webrtc", "mp4"):
             self._attr_supported_features = CameraEntityFeature.STREAM
         else:
             self._attr_supported_features = CameraEntityFeature(0)
