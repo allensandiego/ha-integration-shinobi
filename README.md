@@ -20,7 +20,7 @@ Before you begin, ensure you have the following from your Shinobi instance:
 ### HACS (Recommended)
 1. Open HACS in Home Assistant.
 2. Click on the three dots in the top right corner and select "Custom repositories".
-3. Paste the URL of this repository (`https://github.com/allensandiego/ha-integratio-shinobi`) and select **Integration** as the category.
+3. Paste the URL of this repository (`https://github.com/allensandiego/ha-integration-shinobi`) and select **Integration** as the category.
 4. Click "Add" and then install the **Shinobi Video** integration.
 5. Restart Home Assistant.
 

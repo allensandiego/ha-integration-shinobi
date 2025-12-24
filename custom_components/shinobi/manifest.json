@@ -1,8 +1,8 @@
 {
     "domain": "shinobi",
     "name": "Shinobi Video",
-    "documentation": "https://github.com/allensandiego/ha-integratio-shinobi",
-    "issue_tracker": "https://github.com/allensandiego/ha-integratio-shinobi/issues",
+    "documentation": "https://github.com/allensandiego/ha-integration-shinobi",
+    "issue_tracker": "https://github.com/allensandiego/ha-integration-shinobi/issues",
     "dependencies": [],
     "codeowners": [
         "@allensandiego"
