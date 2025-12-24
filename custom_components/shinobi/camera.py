@@ -52,14 +52,7 @@ class ShinobiCamera(CoordinatorEntity, Camera):
         self, width: int | None = None, height: int | None = None
     ) -> bytes | None:
         """Return a still image response from the camera."""
-        url = self._api.get_snapshot_url(self._monitor_id)
-        try:
-            response = await self._api._session.get(url)
-            if response.status == 200:
-                return await response.read()
-        except Exception:
-            pass
-        return None
+        return await self._api.async_get_camera_image(self._monitor_id)
 
     async def stream_source(self) -> str | None:
         """Return the source of the stream."""

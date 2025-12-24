@@ -64,12 +64,6 @@ class ShinobiRecordingSwitch(CoordinatorEntity, SwitchEntity):
 
     async def _change_mode(self, mode: str) -> None:
         """Change the monitor mode via API."""
-        # Shinobi mode command: /[API_KEY]/monitor/[GROUP_KEY]/[MONITOR_ID]/[MODE]
-        url = f"{self._api._url}/{self._api._api_key}/monitor/{self._api._group_key}/{self._monitor_id}/{mode}"
-        try:
-            response = await self._api._session.get(url)
-            if response.status == 200:
-                # Force refresh to update the state in HA
-                await self.coordinator.async_request_refresh()
-        except Exception:
-            pass
+        if await self._api.async_change_mode(self._monitor_id, mode):
+            # Force refresh to update the state in HA
+            await self.coordinator.async_request_refresh()

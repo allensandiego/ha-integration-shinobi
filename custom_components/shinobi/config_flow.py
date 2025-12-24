@@ -13,7 +13,7 @@ import homeassistant.helpers.config_validation as cv
 
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .api import ShinobiApi
-from .const import DOMAIN, CONF_URL, CONF_API_KEY, CONF_GROUP_KEY
+from .const import DOMAIN, CONF_URL, CONF_API_KEY, CONF_GROUP_KEY, CONF_VERIFY_SSL
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,6 +22,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
         vol.Required(CONF_URL): cv.string,
         vol.Required(CONF_API_KEY): cv.string,
         vol.Required(CONF_GROUP_KEY): cv.string,
+        vol.Optional(CONF_VERIFY_SSL, default=True): cv.boolean,
     }
 )
 
@@ -34,13 +35,15 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
         data[CONF_URL],
         data[CONF_API_KEY],
         data[CONF_GROUP_KEY],
+        data.get(CONF_VERIFY_SSL, True),
     )
 
     try:
         if not await api.test_connection():
             raise CannotConnect
     except Exception as err:
-        if "Unauthorized" in str(err) or "Invalid" in str(err):
+        _LOGGER.error("Connection validation failed: %s", err)
+        if "Unauthorized" in str(err) or "Invalid" in str(err) or "Access denied" in str(err):
             raise InvalidAuth
         raise CannotConnect
 

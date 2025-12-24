@@ -11,7 +11,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .api import ShinobiApi
-from .const import DOMAIN, CONF_GROUP_KEY, CONF_URL, CONF_API_KEY
+from .const import DOMAIN, CONF_GROUP_KEY, CONF_URL, CONF_API_KEY, CONF_VERIFY_SSL
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -26,6 +26,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         entry.data[CONF_URL],
         entry.data[CONF_API_KEY],
         entry.data[CONF_GROUP_KEY],
+        entry.data.get(CONF_VERIFY_SSL, True),
     )
 
     async def async_update_data():
