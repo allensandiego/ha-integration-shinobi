@@ -6,7 +6,7 @@ import logging
 import aiohttp
 import async_timeout
 
-_LOGGER = logging.getLogger("Shinobi Video")
+_LOGGER = logging.getLogger(__name__)
 
 
 class ShinobiApi:
@@ -90,13 +90,19 @@ class ShinobiApi:
         """Get the snapshot URL for a monitor."""
         return f"{self._url}/{self._api_key}/jpeg/{self._group_key}/{monitor_id}/s.jpg"
 
-    def get_stream_url(self, monitor_id: str, stream_url: str) -> str:
+    def get_stream_url(self, monitor_id: str, stream_url: str | None = None) -> str:
         """Get the stream URL for a monitor. Use stream_url if available."""
         _LOGGER.debug("Generating stream URL for monitor %s. Provided URL: %s", monitor_id, stream_url)
-        if stream_url.startswith("/"):
-            res = f"{self._url}{stream_url}"
+        
+        if stream_url:
+            if stream_url.startswith("/"):
+                res = f"{self._url}{stream_url}"
+            else:
+                res = stream_url
         else:
-            res = stream_url
+            # Fallback to default HLS path if no stream_url provided
+            res = f"{self._url}/{self._api_key}/hls/{self._group_key}/{monitor_id}/index.m3u8"
+            
         _LOGGER.debug("Final stream URL for %s: %s", monitor_id, res)
         return res
 

@@ -8,7 +8,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN
 import logging
 
-_LOGGER = logging.getLogger("Shinobi Video")
+_LOGGER = logging.getLogger(__name__)
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -54,17 +54,18 @@ class ShinobiCamera(CoordinatorEntity, Camera):
                 details = {}
         
         self._stream_type = details.get("stream_type", "hls")
+        
+        self._attr_name = monitor["name"]
+        self._attr_unique_id = f"shinobi_{self._monitor_id}"
+        self._attr_brand = "Shinobi"
+        self._attr_model = monitor.get("type", "Unknown")
+
         _LOGGER.debug(
             "Initialized camera %s (id: %s) with stream type: %s",
             self._attr_name,
             self._monitor_id,
             self._stream_type,
         )
-
-        self._attr_name = monitor["name"]
-        self._attr_unique_id = f"shinobi_{self._monitor_id}"
-        self._attr_brand = "Shinobi"
-        self._attr_model = monitor.get("type", "Unknown")
         
         if self._stream_type == "hls":
             self._attr_supported_features = CameraEntityFeature.STREAM

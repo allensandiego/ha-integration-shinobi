@@ -13,7 +13,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .api import ShinobiApi
 from .const import DOMAIN, CONF_GROUP_KEY, CONF_URL, CONF_API_KEY, CONF_VERIFY_SSL
 
-_LOGGER = logging.getLogger("Shinobi Video")
+_LOGGER = logging.getLogger(__name__)
 
 PLATFORMS: list[str] = ["sensor", "camera", "switch"]
 

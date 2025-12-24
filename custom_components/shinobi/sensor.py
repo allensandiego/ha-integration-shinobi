@@ -8,7 +8,7 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 import logging
 from .const import DOMAIN
 
-_LOGGER = logging.getLogger("Shinobi Video")
+_LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_entry(
