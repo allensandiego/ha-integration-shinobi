@@ -6,7 +6,7 @@
 Shinobi Video provides a custom integration for [Shinobi.Video](https://shinobi.video/) to monitor your cameras (monitors) directly within Home Assistant.
 
 ## Features
-- 🎥 **Live Camera Streams**: Supports both HLS and MJPEG streaming (automatically detected based on your Shinobi monitor settings).
+- 🎥 **Live Camera Streams**: Supports HLS (Recommended), MP4 and MJPEG streaming (automatically detected based on your Shinobi monitor settings).
 - 📸 **Instant Snapshots**: View high-quality still images directly in your Home Assistant dashboard.
 - 🔴 **Control Recordings**: Toggle recording on/off for each camera with dedicated switch entities.
 - 🔔 **Monitor Status**: Real-time sensors showing the current status of each monitor.
@@ -18,11 +18,6 @@ Before you begin, ensure you have the following from your Shinobi instance:
 1. **Server URL**: The full URL or IP of your Shinobi server (e.g., `http://192.168.1.10:8080`).
 2. **API Key**: Generated in the Shinobi dashboard with "Read" and "Stream" permissions.
 3. **Group Key**: Your Shinobi user group key.
-
-### Shinobi Monitor Configuration
-For the best experience, ensure each monitor in Shinobi is configured as follows:
-- **JPEG API**: Must be **Enabled** to show previews and snapshots.
-- **Streamer**: To use HLS, ensure the "Stream Type" is set to HLS in the monitor's "Streamer" section. The integration will automatically use the best available stream URL provided by Shinobi.
 
 ## Installation
 
@@ -47,4 +42,4 @@ You will be prompted for:
 - **Group Key**
 - **Verify SSL**: Uncheck this if you are using self-signed certificates on your local Shinobi server.
 
-The integration will automatically detect all monitors and create corresponding Camera and Sensor entities.
+The integration will automatically detect all active monitors and create corresponding Camera and Sensor entities.
