@@ -98,11 +98,10 @@ class ShinobiCamera(CoordinatorEntity, Camera):
 
     async def stream_source(self) -> str | None:
         """Return the source of the stream."""
-        if self._stream_type == "hls":
-            monitor = self.coordinator.data.get(self._monitor_id)
-            stream_url = None
-            if monitor and monitor.get("streams"):
-                stream_url = monitor["streams"][0]
+        monitor = self.coordinator.data.get(self._monitor_id)
+        stream_url = None
+        if monitor and monitor.get("streams"):
+            stream_url = monitor["streams"][0]
             
             return self._api.get_stream_url(self._monitor_id, stream_url)
         return None
