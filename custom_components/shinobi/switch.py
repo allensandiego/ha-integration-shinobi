@@ -70,5 +70,5 @@ class ShinobiRecordingSwitch(CoordinatorEntity, SwitchEntity):
         """Turn the switch off (set to watch/stop)."""
         _LOGGER.info("Turning off recording for monitor %s", self._monitor_id)
         # We default to 'watch' when turning off recording
-        if await self._api.async_change_mode(self._monitor_id, "watch"):
+        if await self._api.async_change_mode(self._monitor_id, "start"):
             await self.coordinator.async_request_refresh()
