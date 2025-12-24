@@ -56,6 +56,10 @@ class ShinobiCamera(CoordinatorEntity, Camera):
                 details = {}
         
         self._stream_type = details.get("stream_type", "hls")
+        self._streams = monitor.get("streams", [])
+        self._stream_url = self._streams[0] if self._streams else None
+        
+        _LOGGER.info("Stream URL for monitor %s (%s): %s", self._monitor_id, monitor.get("name"), self._stream_url)
         
         self._attr_name = monitor["name"]
         self._attr_unique_id = f"shinobi_{self._monitor_id}"

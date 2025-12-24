@@ -97,7 +97,7 @@ class ShinobiApi:
 
     def get_stream_url(self, monitor_id: str, stream_url: str | None = None) -> str:
         """Get the stream URL for a monitor. Use stream_url if available."""
-        _LOGGER.debug("Generating stream URL for monitor %s. Provided URL: %s", monitor_id, stream_url)
+        _LOGGER.info("Generating stream URL for monitor %s. Provided URL: %s", monitor_id, stream_url)
         
         if stream_url:
             if stream_url.startswith("/"):
@@ -108,7 +108,7 @@ class ShinobiApi:
             # Fallback to default HLS path if no stream_url provided
             res = f"{self._url}/{self._api_key}/hls/{self._group_key}/{monitor_id}/index.m3u8"
             
-        _LOGGER.debug("Final stream URL for %s: %s", monitor_id, res)
+        _LOGGER.info("Final stream URL for %s: %s", monitor_id, res)
         return res
 
     async def async_get_camera_image(self, monitor_id: str) -> bytes | None:
