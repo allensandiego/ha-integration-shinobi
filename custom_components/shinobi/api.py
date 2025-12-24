@@ -90,6 +90,11 @@ class ShinobiApi:
         """Get the snapshot URL for a monitor."""
         return f"{self._url}/{self._api_key}/jpeg/{self._group_key}/{monitor_id}/s.jpg"
 
+    def get_mjpeg_stream_coro(self, monitor_id: str, stream_url: str):
+        """Return the coroutine for the MJPEG stream."""
+        url = self.get_stream_url(monitor_id, stream_url)
+        return self._session.get(url, ssl=None if self._verify_ssl else False)
+
     def get_stream_url(self, monitor_id: str, stream_url: str | None = None) -> str:
         """Get the stream URL for a monitor. Use stream_url if available."""
         _LOGGER.debug("Generating stream URL for monitor %s. Provided URL: %s", monitor_id, stream_url)

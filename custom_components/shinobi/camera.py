@@ -1,5 +1,7 @@
 from typing import Any
+from aiohttp import web
 from homeassistant.components.camera import Camera, CameraEntityFeature
+from homeassistant.helpers.aiohttp_client import async_aiohttp_proxy_web
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
@@ -67,7 +69,7 @@ class ShinobiCamera(CoordinatorEntity, Camera):
             self._stream_type,
         )
         
-        if self._stream_type in ("hls", "rtsp", "webrtc", "mp4", "mjpeg"):
+        if self._stream_type in ("hls", "rtsp", "webrtc", "mp4"):
             self._attr_supported_features = CameraEntityFeature.STREAM
         else:
             self._attr_supported_features = CameraEntityFeature(0)
@@ -111,6 +113,8 @@ class ShinobiCamera(CoordinatorEntity, Camera):
 
     async def stream_source(self) -> str | None:
         """Return the source of the stream."""
+        if self._stream_type not in ("hls", "rtsp", "webrtc", "mp4"):
+            return None
         
         monitor = self.coordinator.data.get(self._monitor_id)
         stream_url = None
@@ -121,3 +125,13 @@ class ShinobiCamera(CoordinatorEntity, Camera):
         res = self._api.get_stream_url(self._monitor_id, stream_url)
         _LOGGER.debug("Stream source for %s: %s", self._attr_name, res)
         return res
+
+    async def handle_async_mjpeg_stream(
+        self, request: web.Request
+    ) -> web.StreamResponse | None:
+        """Generate an HTTP MJPEG stream from the camera."""
+        if self._stream_type != "mjpeg":
+            return await super().handle_async_mjpeg_stream(request)
+
+        stream_coro = self._api.get_mjpeg_stream_coro(self._monitor_id, self._stream_url)
+        return await async_aiohttp_proxy_web(self.hass, request, stream_coro)
