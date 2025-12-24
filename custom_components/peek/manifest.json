@@ -1,0 +1,13 @@
+{
+    "domain": "peek",
+    "name": "Peek",
+    "documentation": "https://github.com/allensandiego/peek-hacs",
+    "issue_tracker": "https://github.com/allensandiego/peek-hacs/issues",
+    "dependencies": [],
+    "codeowners": [
+        "@allensandiego"
+    ],
+    "config_flow": true,
+    "iot_class": "cloud_polling",
+    "version": "1.0.0"
+}
