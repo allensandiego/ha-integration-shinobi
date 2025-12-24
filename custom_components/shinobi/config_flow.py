@@ -13,7 +13,7 @@ import homeassistant.helpers.config_validation as cv
 
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .api import ShinobiApi
-from .const import DOMAIN, CONF_URL, CONF_API_KEY, CONF_GROUP_KEY, CONF_VERIFY_SSL
+from .const import DOMAIN, CONF_URL, CONF_API_KEY, CONF_GROUP_KEY, CONF_VERIFY_SSL, CONF_STREAM_TYPE
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -22,6 +22,7 @@ STEP_USER_DATA_SCHEMA = vol.Schema(
         vol.Required(CONF_URL): cv.string,
         vol.Required(CONF_API_KEY): cv.string,
         vol.Required(CONF_GROUP_KEY): cv.string,
+        vol.Optional(CONF_STREAM_TYPE, default="hls"): vol.In(["hls", "mjpeg"]),
         vol.Optional(CONF_VERIFY_SSL, default=True): cv.boolean,
     }
 )

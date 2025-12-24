@@ -14,6 +14,10 @@ Before you begin, ensure you have the following from your Shinobi instance:
 1. **Server URL**: The full URL of your Shinobi server (e.g., `http://192.168.1.10:8080`).
 2. **API Key**: Generated in the Shinobi dashboard.
 3. **Group Key**: Your Shinobi user group key.
+4. **Monitor Settings**: Each camera (monitor) must have specific settings enabled in Shinobi:
+    - **JPEG API**: Enable this to see snapshots/previews in Home Assistant.
+    - **Streamer**: To use HLS streaming, ensure the "Stream Type" is set to HLS in the monitor's "Streamer" section.
+    - **API Key Permissions**: Ensure your API key has permission to "Read" and "Stream" monitors.
 
 ## Installation
 

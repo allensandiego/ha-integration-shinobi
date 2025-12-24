@@ -1,10 +1,10 @@
-from homeassistant.components.camera import Camera
+from homeassistant.components.camera import Camera, CameraEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN
+from .const import DOMAIN, CONF_STREAM_TYPE
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -20,9 +20,11 @@ async def async_setup_entry(
     if not monitors_dict:
         return
 
+    stream_type = entry.data.get(CONF_STREAM_TYPE, "hls")
+
     entities = []
     for mid, monitor in monitors_dict.items():
-        entities.append(ShinobiCamera(coordinator, api, monitor))
+        entities.append(ShinobiCamera(coordinator, api, monitor, stream_type))
 
     async_add_entities(entities)
 
@@ -30,14 +32,22 @@ async def async_setup_entry(
 class ShinobiCamera(CoordinatorEntity, Camera):
     """Representation of a Shinobi Video camera."""
 
-    def __init__(self, coordinator, api, monitor) -> None:
+    def __init__(self, coordinator, api, monitor, stream_type) -> None:
         """Initialize the camera."""
         super().__init__(coordinator)
         Camera.__init__(self)
         self._api = api
         self._monitor_id = monitor["mid"]
+        self._stream_type = stream_type
         self._attr_name = monitor["name"]
         self._attr_unique_id = f"shinobi_{self._monitor_id}"
+        self._attr_brand = "Shinobi"
+        self._attr_model = monitor.get("type", "Unknown")
+        
+        if self._stream_type == "hls":
+            self._attr_supported_features = CameraEntityFeature.STREAM
+        else:
+            self._attr_supported_features = CameraEntityFeature(0)
 
     @property
     def is_recording(self) -> bool:
@@ -56,4 +66,6 @@ class ShinobiCamera(CoordinatorEntity, Camera):
 
     async def stream_source(self) -> str | None:
         """Return the source of the stream."""
-        return self._api.get_stream_url(self._monitor_id)
+        if self._stream_type == "hls":
+            return self._api.get_stream_url(self._monitor_id, "hls")
+        return None

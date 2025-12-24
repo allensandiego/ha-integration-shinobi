@@ -92,7 +92,7 @@ class ShinobiApi:
     def get_stream_url(self, monitor_id: str, stream_type: str = "hls") -> str:
         """Get the stream URL for a monitor."""
         if stream_type == "hls":
-            return f"{self._url}/{self._api_key}/hls/{self._group_key}/{monitor_id}/s.m3u8"
+            return f"{self._url}/{self._api_key}/hls/{self._group_key}/{monitor_id}/index.m3u8"
         return self.get_mjpeg_url(monitor_id)
 
     async def async_get_camera_image(self, monitor_id: str) -> bytes | None:

@@ -3,7 +3,9 @@
     "name": "Shinobi Video",
     "documentation": "https://github.com/allensandiego/ha-integration-shinobi",
     "issue_tracker": "https://github.com/allensandiego/ha-integration-shinobi/issues",
-    "dependencies": [],
+    "dependencies": [
+        "stream"
+    ],
     "codeowners": [
         "@allensandiego"
     ],
