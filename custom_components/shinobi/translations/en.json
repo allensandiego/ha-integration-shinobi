@@ -2,7 +2,7 @@
     "config": {
         "step": {
             "user": {
-                "title": "Connect to Peek",
+                "title": "Connect to Shinobi Video",
                 "data": {
                     "url": "Server URL",
                     "api_key": "API Key",

@@ -1,6 +1,6 @@
-"""Constants for the Peek integration."""
+"""Constants for the Shinobi Video integration."""
 
-DOMAIN = "peek"
+DOMAIN = "shinobi"
 CONF_URL = "url"
 CONF_API_KEY = "api_key"
 CONF_GROUP_KEY = "group_key"

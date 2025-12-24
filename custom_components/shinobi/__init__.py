@@ -1,4 +1,4 @@
-"""The Peek integration."""
+"""The Shinobi Video integration."""
 from __future__ import annotations
 from datetime import timedelta
 
@@ -19,7 +19,7 @@ PLATFORMS: list[str] = ["sensor", "camera", "switch"]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up Peek (Shinobi Video) from a config entry."""
+    """Set up Shinobi Video from a config entry."""
     session = async_get_clientsession(hass)
     api = ShinobiApi(
         session,

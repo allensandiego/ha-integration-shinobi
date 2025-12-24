@@ -1,8 +1,8 @@
-# Peek: Shinobi.Video for Home Assistant
+# Shinobi Video for Home Assistant
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
-Peek provides a custom integration for [Shinobi.Video](https://shinobi.video/) to monitor and control your cameras (monitors) directly within Home Assistant.
+Shinobi Video provides a custom integration for [Shinobi.Video](https://shinobi.video/) to monitor and control your cameras (monitors) directly within Home Assistant.
 
 ## Features
 - 🎥 View camera streams (monitors)
@@ -20,17 +20,17 @@ Before you begin, ensure you have the following from your Shinobi instance:
 ### HACS (Recommended)
 1. Open HACS in Home Assistant.
 2. Click on the three dots in the top right corner and select "Custom repositories".
-3. Paste the URL of this repository (`https://github.com/allensandiego/peek-hacs`) and select **Integration** as the category.
-4. Click "Add" and then install the **Peek** integration.
+3. Paste the URL of this repository (`https://github.com/allensandiego/ha-integratio-shinobi`) and select **Integration** as the category.
+4. Click "Add" and then install the **Shinobi Video** integration.
 5. Restart Home Assistant.
 
 ### Manual
 1. Download the latest release.
-2. Copy the `custom_components/peek` directory into your Home Assistant's `custom_components` directory.
+2. Copy the `custom_components/shinobi` directory into your Home Assistant's `custom_components` directory.
 3. Restart Home Assistant.
 
 ## Configuration
-Go to **Settings** > **Devices & Services** > **Add Integration** and search for **Peek**. You will be prompted for:
+Go to **Settings** > **Devices & Services** > **Add Integration** and search for **Shinobi Video**. You will be prompted for:
 - **Server URL**
 - **API Key**
 - **Group Key**
