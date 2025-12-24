@@ -2,12 +2,11 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-orange.svg)](https://github.com/hacs/integration)
 
-Shinobi Video provides a custom integration for [Shinobi.Video](https://shinobi.video/) to monitor and control your cameras (monitors) directly within Home Assistant.
+Shinobi Video provides a custom integration for [Shinobi.Video](https://shinobi.video/) to monitor your cameras (monitors) directly within Home Assistant.
 
 ## Features
-- 🎥 View camera streams (monitors)
-- 🔔 Motion detection sensors
-- 🕹️ Control monitor state (Watch, Record, Stop)
+- 🎥 View live camera streams (HLS/MJPEG)
+- 🔔 Monitor status sensors
 
 ## Prerequisites
 Before you begin, ensure you have the following from your Shinobi instance:

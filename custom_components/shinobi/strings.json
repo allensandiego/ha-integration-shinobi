@@ -7,7 +7,6 @@
                     "url": "Server URL",
                     "api_key": "API Key",
                     "group_key": "Group Key",
-                    "stream_type": "Preferred Stream Type (HLS or MJPEG)",
                     "verify_ssl": "Verify SSL Certificate"
                 }
             }

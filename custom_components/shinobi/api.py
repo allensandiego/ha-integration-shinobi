@@ -89,11 +89,14 @@ class ShinobiApi:
         """Get the MJPEG stream URL for a monitor."""
         return f"{self._url}/{self._api_key}/mjpeg/{self._group_key}/{monitor_id}"
 
-    def get_stream_url(self, monitor_id: str, stream_type: str = "hls") -> str:
-        """Get the stream URL for a monitor."""
-        if stream_type == "hls":
-            return f"{self._url}/{self._api_key}/hls/{self._group_key}/{monitor_id}/index.m3u8"
-        return self.get_mjpeg_url(monitor_id)
+    def get_stream_url(self, monitor_id: str, provided_url: str | None = None) -> str:
+        """Get the stream URL for a monitor. Use provided_url if available."""
+        if provided_url:
+            if provided_url.startswith("/"):
+                return f"{self._url}{provided_url}"
+            return provided_url
+            
+        return f"{self._url}/{self._api_key}/hls/{self._group_key}/{monitor_id}/index.m3u8"
 
     async def async_get_camera_image(self, monitor_id: str) -> bytes | None:
         """Fetch a still image from the camera."""
@@ -107,15 +110,3 @@ class ShinobiApi:
             _LOGGER.error("Error fetching camera image for %s: %s", monitor_id, err)
         return None
 
-    async def async_change_mode(self, monitor_id: str, mode: str) -> bool:
-        """Change the monitor mode."""
-        url = f"{self._url}/{self._api_key}/monitor/{self._group_key}/{monitor_id}/{mode}"
-        try:
-            async with async_timeout.timeout(10):
-                response = await self._session.get(url, ssl=None if self._verify_ssl else False)
-                if response.status == 200:
-                    return True
-                _LOGGER.error("Error changing mode for %s to %s: %s", monitor_id, mode, response.status)
-        except Exception as err:
-            _LOGGER.error("Error changing mode for %s: %s", monitor_id, err)
-        return False

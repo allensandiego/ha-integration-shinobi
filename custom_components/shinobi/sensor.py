@@ -51,9 +51,14 @@ class ShinobiStatusSensor(CoordinatorEntity, SensorEntity):
         """Return extra state attributes."""
         monitor = self.coordinator.data.get(self._monitor_id)
         if monitor:
-            return {
+            extra_attributes = {
                 "mid": monitor.get("mid"),
-                "mode": monitor.get("mode"),
                 "type": monitor.get("type"),
             }
+            
+            streams = monitor.get("streams", [])
+            if streams and isinstance(streams, list):
+                extra_attributes["stream_url"] = streams[0]
+            
+            return extra_attributes
         return {}

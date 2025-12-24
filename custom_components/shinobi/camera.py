@@ -1,10 +1,11 @@
+from typing import Any
 from homeassistant.components.camera import Camera, CameraEntityFeature
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
-from .const import DOMAIN, CONF_STREAM_TYPE
+from .const import DOMAIN
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -20,11 +21,9 @@ async def async_setup_entry(
     if not monitors_dict:
         return
 
-    stream_type = entry.data.get(CONF_STREAM_TYPE, "hls")
-
     entities = []
     for mid, monitor in monitors_dict.items():
-        entities.append(ShinobiCamera(coordinator, api, monitor, stream_type))
+        entities.append(ShinobiCamera(coordinator, api, monitor))
 
     async_add_entities(entities)
 
@@ -32,13 +31,24 @@ async def async_setup_entry(
 class ShinobiCamera(CoordinatorEntity, Camera):
     """Representation of a Shinobi Video camera."""
 
-    def __init__(self, coordinator, api, monitor, stream_type) -> None:
+    def __init__(self, coordinator, api, monitor) -> None:
         """Initialize the camera."""
         super().__init__(coordinator)
         Camera.__init__(self)
         self._api = api
         self._monitor_id = monitor["mid"]
-        self._stream_type = stream_type
+        
+        # Derive stream_type from details.stream_type in the JSON response
+        details = monitor.get("details", {})
+        if isinstance(details, str):
+            import json
+            try:
+                details = json.loads(details)
+            except:
+                details = {}
+        
+        self._stream_type = details.get("stream_type", "hls")
+        
         self._attr_name = monitor["name"]
         self._attr_unique_id = f"shinobi_{self._monitor_id}"
         self._attr_brand = "Shinobi"
@@ -50,13 +60,27 @@ class ShinobiCamera(CoordinatorEntity, Camera):
             self._attr_supported_features = CameraEntityFeature(0)
 
     @property
-    def is_recording(self) -> bool:
-        """Return true if the device is recording."""
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return extra state attributes."""
         monitor = self.coordinator.data.get(self._monitor_id)
         if monitor:
-            # Shinobi status can be "recording", "watching", etc.
-            return monitor.get("status") == "recording"
-        return False
+            extra_attributes = {
+                "mid": monitor.get("mid"),
+                "type": monitor.get("type"),
+            }
+            
+            # Derive stream_url similar to sensor.py
+            streams = monitor.get("streams", [])
+            if streams and isinstance(streams, list):
+                extra_attributes["stream_url"] = streams[0]
+            
+            return extra_attributes
+        return {}
+
+    @property
+    def is_on(self) -> bool:
+        """Return true if the camera is active."""
+        return True
 
     async def async_camera_image(
         self, width: int | None = None, height: int | None = None
@@ -67,5 +91,10 @@ class ShinobiCamera(CoordinatorEntity, Camera):
     async def stream_source(self) -> str | None:
         """Return the source of the stream."""
         if self._stream_type == "hls":
-            return self._api.get_stream_url(self._monitor_id, "hls")
+            monitor = self.coordinator.data.get(self._monitor_id)
+            stream_url = None
+            if monitor and monitor.get("streams"):
+                stream_url = monitor["streams"][0]
+            
+            return self._api.get_stream_url(self._monitor_id, stream_url)
         return None
