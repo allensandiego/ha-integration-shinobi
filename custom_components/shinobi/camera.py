@@ -6,6 +6,9 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
 from .const import DOMAIN
+import logging
+
+_LOGGER = logging.getLogger("Shinobi Video")
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -19,7 +22,10 @@ async def async_setup_entry(
 
     monitors_dict = coordinator.data
     if not monitors_dict:
+        _LOGGER.warning("No monitors found to set up camera entities")
         return
+
+    _LOGGER.debug("Setting up %d camera entities", len(monitors_dict))
 
     entities = []
     for mid, monitor in monitors_dict.items():
@@ -48,7 +54,13 @@ class ShinobiCamera(CoordinatorEntity, Camera):
                 details = {}
         
         self._stream_type = details.get("stream_type", "hls")
-        
+        _LOGGER.debug(
+            "Initialized camera %s (id: %s) with stream type: %s",
+            self._attr_name,
+            self._monitor_id,
+            self._stream_type,
+        )
+
         self._attr_name = monitor["name"]
         self._attr_unique_id = f"shinobi_{self._monitor_id}"
         self._attr_brand = "Shinobi"
@@ -102,6 +114,8 @@ class ShinobiCamera(CoordinatorEntity, Camera):
         stream_url = None
         if monitor and monitor.get("streams"):
             stream_url = monitor["streams"][0]
+            _LOGGER.debug("Found stream URL in monitor data for %s: %s", self._monitor_id, stream_url)
             
-            return self._api.get_stream_url(self._monitor_id, stream_url)
-        return None
+        res = self._api.get_stream_url(self._monitor_id, stream_url)
+        _LOGGER.debug("Stream source for %s: %s", self._attr_name, res)
+        return res

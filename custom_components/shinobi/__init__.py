@@ -13,13 +13,14 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .api import ShinobiApi
 from .const import DOMAIN, CONF_GROUP_KEY, CONF_URL, CONF_API_KEY, CONF_VERIFY_SSL
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER = logging.getLogger("Shinobi Video")
 
 PLATFORMS: list[str] = ["sensor", "camera", "switch"]
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Shinobi Video from a config entry."""
+    _LOGGER.info("Setting up Shinobi Video integration for %s", entry.data.get(CONF_URL))
     session = async_get_clientsession(hass)
     api = ShinobiApi(
         session,
@@ -33,9 +34,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         """Fetch data from API endpoint."""
         try:
             monitors = await api.get_monitors()
+            _LOGGER.debug("Successfully refreshed data from Shinobi API")
             # Shinobi returns a list of monitors. Convert to dict for easier lookup.
             return {monitor["mid"]: monitor for monitor in monitors}
         except Exception as err:
+            _LOGGER.error("Error communicating with Shinobi API: %s", err)
             raise UpdateFailed(f"Error communicating with API: {err}")
 
     coordinator = DataUpdateCoordinator(
@@ -57,6 +60,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
+    _LOGGER.info("Successfully set up Shinobi Video integration")
     return True
 
 

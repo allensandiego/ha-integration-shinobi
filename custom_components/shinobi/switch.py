@@ -9,7 +9,10 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+import logging
 from .const import DOMAIN
+
+_LOGGER = logging.getLogger("Shinobi Video")
 
 
 async def async_setup_entry(
@@ -24,7 +27,10 @@ async def async_setup_entry(
 
     monitors_dict = coordinator.data
     if not monitors_dict:
+        _LOGGER.warning("No monitors found to set up switch entities")
         return
+
+    _LOGGER.debug("Setting up %d switch entities", len(monitors_dict))
 
     entities = []
     for mid, monitor in monitors_dict.items():
@@ -56,11 +62,13 @@ class ShinobiRecordingSwitch(CoordinatorEntity, SwitchEntity):
 
     async def async_turn_on(self, **kwargs: Any) -> None:
         """Turn the switch on (start recording)."""
+        _LOGGER.info("Turning on recording for monitor %s", self._monitor_id)
         if await self._api.async_change_mode(self._monitor_id, "record"):
             await self.coordinator.async_request_refresh()
 
     async def async_turn_off(self, **kwargs: Any) -> None:
         """Turn the switch off (set to watch/stop)."""
+        _LOGGER.info("Turning off recording for monitor %s", self._monitor_id)
         # We default to 'watch' when turning off recording
         if await self._api.async_change_mode(self._monitor_id, "watch"):
             await self.coordinator.async_request_refresh()

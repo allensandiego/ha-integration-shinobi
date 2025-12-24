@@ -5,7 +5,10 @@ from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
+import logging
 from .const import DOMAIN
+
+_LOGGER = logging.getLogger("Shinobi Video")
 
 
 async def async_setup_entry(
@@ -19,7 +22,10 @@ async def async_setup_entry(
 
     monitors_dict = coordinator.data
     if not monitors_dict:
+        _LOGGER.warning("No monitors found to set up sensor entities")
         return
+
+    _LOGGER.debug("Setting up %d sensor entities", len(monitors_dict))
 
     entities = []
     for mid, monitor in monitors_dict.items():

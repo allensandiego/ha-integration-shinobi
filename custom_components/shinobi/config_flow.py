@@ -40,12 +40,15 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
 
     try:
         if not await api.test_connection():
+            _LOGGER.warning("Connection test failed for URL: %s", data[CONF_URL])
             raise CannotConnect
     except Exception as err:
-        _LOGGER.error("Connection validation failed: %s", err)
+        _LOGGER.error("Connection validation failed for %s: %s", data[CONF_URL], err)
         if "Unauthorized" in str(err) or "Invalid" in str(err) or "Access denied" in str(err):
             raise InvalidAuth
         raise CannotConnect
+
+    _LOGGER.info("Connection validation successful for %s", data[CONF_URL])
 
     # Return info that you want to store in the config entry.
     return {"title": "Shinobi Video"}
