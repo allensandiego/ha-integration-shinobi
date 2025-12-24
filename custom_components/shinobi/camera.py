@@ -67,7 +67,7 @@ class ShinobiCamera(CoordinatorEntity, Camera):
             self._stream_type,
         )
         
-        if self._stream_type in ("hls", "rtsp", "webrtc", "mp4"):
+        if self._stream_type in ("hls", "rtsp", "webrtc", "mp4", "mjpeg"):
             self._attr_supported_features = CameraEntityFeature.STREAM
         else:
             self._attr_supported_features = CameraEntityFeature(0)
@@ -111,6 +111,7 @@ class ShinobiCamera(CoordinatorEntity, Camera):
 
     async def stream_source(self) -> str | None:
         """Return the source of the stream."""
+        
         monitor = self.coordinator.data.get(self._monitor_id)
         stream_url = None
         if monitor and monitor.get("streams"):
