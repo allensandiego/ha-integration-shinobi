@@ -43,3 +43,17 @@ You will be prompted for:
 - **Verify SSL**: Uncheck this if you are using self-signed certificates on your local Shinobi server.
 
 The integration will automatically detect all active monitors and create corresponding Camera and Sensor entities.
+
+## Troubleshooting
+
+### Setup dialog asks for Host, Port, Username, and Password
+If adding the integration presents a form with **Host**, **Path**, **Port**, **Username**, and **Password** (and potentially an *"Invalid server details"* error) instead of **Server URL**, **API Key**, and **Group Key**:
+- You have the default HACS integration (`elad-bar/ha-shinobi`) loaded. Because both integrations use the `shinobi` integration domain, Home Assistant will continue running the previously loaded integration until it is replaced and restarted.
+- **Resolution**:
+  1. In **HACS**, uninstall any existing Shinobi integration (and delete `custom_components/shinobi` if it was manually copied).
+  2. **Restart Home Assistant** so cached component definitions are removed.
+  3. In **HACS** > **Custom repositories**, add `https://github.com/allensandiego/ha-integration-shinobi` (Category: **Integration**).
+  4. Download and install **Shinobi Video** from this custom repository.
+  5. **Restart Home Assistant**.
+  6. Go to **Settings** > **Devices & Services** > **Add Integration** > search for **Shinobi Video**. The prompt will now show the correct fields (**Server URL**, **API Key**, and **Group Key**).
+
